@@ -1,14 +1,14 @@
 import { Header } from "@react-navigation/stack";
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { NavigationContainer, TabRouter } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { onChange } from "react-native-reanimated";
 
 const LoginScreen = ({ navigation }) => {
-  const [phone, setPhone] = useState("");
+  const [phone, onChangePhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isFocused, setIsFocused] = useState(true);
   // const [handleBlur, setHandleBlur] = useState(false);
@@ -26,44 +26,35 @@ const LoginScreen = ({ navigation }) => {
       setPhoneError("");
     }
   }
-
-  function phoneInput(enteredText: React.SetStateAction<string>) {
-    setPhone(enteredText);
-  }
   return (
     <View style={styles.container}>
-      <View>
-        <TouchableOpacity onPress={() => navigation.navigate("register")}>
-          <Text style={[styles.submitText]}>Add new Address</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("demo")}>
-          <Text style={[styles.submitText]}>demo</Text>
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <Text>Welcome to Greenade</Text>
       </View>
-      <View style={styles.white}>
-        <TextInput
-          placeholder="eg : 9876543210"
-          keyboardType={"numeric"}
-          maxLength={10}
-          style={[
-            styles.input,
-            {
-              borderColor: isFocused ? "#939597" : "red",
-            },
-          ]}
-          onBlur={() => [phoneValidator(), setIsFocused(false)]}
-          onFocus={() => {
-            setIsFocused(true);
-          }}
-          onChangeText={() => phoneInput}
-          value={phone}
-        />
+
+      <View style={styles.footer}>
+        <View>
+          <TextInput
+            placeholder="eg : 9876543210"
+            keyboardType={"numeric"}
+            maxLength={10}
+            style={[
+              styles.textInput,
+              {
+                borderColor: isFocused ? "#939597" : "red",
+              },
+            ]}
+            onBlur={() => [phoneValidator()]}
+            onChangeText={onChangePhone}
+            value={phone}
+          />
+        </View>
         <Text style={styles.textError}>{[phoneError]}</Text>
-      </View>
-      <View style={styles.submit}>
-        <TouchableOpacity onPress={() => navigation.navigate("pin")}>
-          <Text style={styles.submitText}>Login</Text>
-        </TouchableOpacity>
+        <View style={styles.submit}>
+          <TouchableOpacity onPress={() => navigation.navigate("pin")}>
+            <Text style={styles.submitText}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -72,17 +63,27 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignContent: "center",
-    backgroundColor: "#fbf2d4",
+    backgroundColor: "#2e8b57",
   },
-  input: {
-    height: 50,
+  header: {
+    flex: 1,
+    justifyContent: "flex-end",
+    paddingBottom: 50,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  footer: {
+    flex: 3,
+    backgroundColor: "white",
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+  textInput: {
+    width: "85%",
     borderWidth: 3,
     borderRadius: 15,
-    width: 300,
     marginTop: 50,
     alignSelf: "center",
-    backgroundColor: "white",
     padding: 10,
     fontSize: 16,
   },
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     width: "85%",
     padding: 10,
     alignSelf: "center",
+    marginTop: "70%",
   },
   submitText: {
     paddingTop: 10,
@@ -105,14 +107,6 @@ const styles = StyleSheet.create({
     color: "red",
     marginLeft: 25,
     fontSize: 15,
-  },
-  white: {
-    backgroundColor: "white",
-    width: "85%",
-    borderRadius: 20,
-    marginTop: "30%",
-    alignSelf: "center",
-    height: "60%",
   },
 });
 

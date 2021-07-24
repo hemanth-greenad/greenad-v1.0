@@ -21,7 +21,7 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-class RegisterScreen extends React.Component<Props> {
+class RegisterAddressScreen extends React.Component<Props> {
   state = {
     name: "",
     nameError: "",
@@ -40,9 +40,24 @@ class RegisterScreen extends React.Component<Props> {
     show: true,
     visible: true,
   };
-  handleFocus = () => this.setState({ isFocused: true });
 
-  handleBlur = () => this.setState({ isFocused: false });
+  getInitialState() {
+    return {
+      borderColor: 'red',
+    }
+  }
+
+  onFocus() {
+    this.setState({
+      borderColor: 'green'
+    })
+  }
+  onBlur() {
+    this.setState({
+      borderColor: 'red'
+    })
+  }
+
 
   phoneValidator() {
     if (this.state.phone == "" && this.state.phone.length != 10) {
@@ -119,12 +134,11 @@ class RegisterScreen extends React.Component<Props> {
           >
             <TextInput
               placeholder="Name"
-              onFocus={this.handleFocus}
-              onBlur={() => [this.handleBlur, this.nameValidator()]}
+              onBlur={() => [this.nameValidator(), this.onBlur()]}
+              onFocus={() => this.onFocus()}
               onChangeText={(text) => {
                 this.setState({ name: text });
               }}
-              style={{ borderColor: this.state.isFocused ? "blue" : "red" }}
             />
             <Text
               style={[
@@ -268,7 +282,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fbf2d4",
   },
   input: {
-    borderColor: "#939597",
+    // borderColor: "#939597",
     borderWidth: 3,
     borderRadius: 15,
     width: "80%",
@@ -309,4 +323,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterScreen;
+export default RegisterAddressScreen;
