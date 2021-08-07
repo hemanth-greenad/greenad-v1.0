@@ -17,6 +17,7 @@ import DrawerScreen from "../screens/DrawerNavigation";
 import { color } from "react-native-reanimated";
 import { Icon } from "react-native-elements";
 import Item from "./IndividualItem";
+import Cart from "./Cart";
 import weeklyPackScreen from "../screens/WeekPackScreen";
 import LoginScreen from "./Login/LoginScreen";
 import PinValidation from "./Login/PinValidation";
@@ -158,10 +159,10 @@ function TabNav() {
         }}
       />
       <Tab.Screen
-        name="d"
-        component={Second}
+        name="Cart"
+        component={Cart}
         options={{
-          tabBarLabel: "My Orders",
+          tabBarLabel: "Cart",
           tabBarIcon: ({ color }) => (
             <Fontisto name="shopping-basket" size={24} color="black" />
           ),
