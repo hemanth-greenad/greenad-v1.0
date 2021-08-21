@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, DeviceEventEmitter } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Fontisto, MaterialIcons } from "@expo/vector-icons";
@@ -25,6 +25,9 @@ import MapScreen from "./Login/MapScreen";
 import AccountScreen from "./Login/AccountScreen";
 import RegisterAddressScreen from "./Login/RegisterAddressScreen";
 import AddressScreen from "./Login/AddressScreen";
+import Favourites from "./Favourites";
+import OrderDetails from "./orderDetails";
+import MyTabBar from './CustomTab';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -132,24 +135,54 @@ function stackTab() {
       <Stack.Screen name="item" component={Item} />
       <Stack.Screen name="result" component={ResultProducts} />
       <Stack.Screen name="weekPack" component={weeklyPackScreen} />
+      <Stack.Screen name="OrderDetails" component={OrderDetails} />
     </Stack.Navigator>
   );
 }
 
 function TabNav() {
+  const [badgeCount, setBadgeCount] = useState(0);
+  DeviceEventEmitter.addListener('updateBadgeCount', (data: number) => {
+    setBadgeCount(data)
+  })
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
+      // tabBar={props => <MyTabBar {...props} />}
       tabBarOptions={{
         activeTintColor: "white",
         inactiveTintColor: "black",
-        activeBackgroundColor: "#295F2D",
-        inactiveBackgroundColor: primaryColor,
+        activeBackgroundColor: primaryColor,
+        inactiveBackgroundColor: 'white',
+        style: { marginBottom: 5 }
       }}
+    // screenOptions={({ route }) => ({
+    //   tabBarIcon: ({ focused, color, size }) => {
+    //     let iconName;
+    //     color = focused
+    //       ? 'white'
+    //       : 'black';
+    //     if (route.name === 'Home') {
+    //       iconName = 'home';
+    //     } else if (route.name === 'Cart') {
+    //       iconName = 'shopping-basket';
+    //       return <Fontisto name="shopping-basket" size={size} color={color} />
+    //     } else if (route.name === 'Favourites') {
+    //       iconName = 'heart-sharp';
+    //     }
+
+    //     // You can return any component that you like here!
+    //     return <Ionicons name={iconName} size={size} color={color} />;
+    //   },
+    //   tabBarActiveTintColor: 'tomato',
+    //   tabBarInactiveTintColor: 'gray',
+    // })}
     >
       <Tab.Screen
         name="Home"
         component={HomePage}
+
         options={{
           title: "Home",
           tabBarLabel: "Home",
@@ -163,14 +196,15 @@ function TabNav() {
         component={Cart}
         options={{
           tabBarLabel: "Cart",
+          tabBarBadge: badgeCount,
           tabBarIcon: ({ color }) => (
             <Fontisto name="shopping-basket" size={24} color="black" />
           ),
         }}
       />
       <Tab.Screen
-        name="Explore"
-        component={Fourth}
+        name="Favourites"
+        component={Favourites}
         options={{
           tabBarLabel: "Favourites",
           tabBarIcon: ({ color }) => (

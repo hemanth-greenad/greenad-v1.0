@@ -5,7 +5,10 @@ import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Json from '../assets/sample.json';
 import VerticalScroll from './cards-vertical-scroll';
+import EmptyCartImg from '../assets/images/EmptyCart.png';
 import Heading from './HeadingComponent';
+import { useNavigation } from '@react-navigation/native';
+
 
 export interface cartItem {
   id: number,
@@ -33,6 +36,7 @@ const Cart = () => {
   const [isLoading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState("0");
+  const navigation = useNavigation();
 
   const addURL =
     "https://raw.githubusercontent.com/somgreenad/food/master/assets/address.json";
@@ -87,12 +91,13 @@ const Cart = () => {
     }
   }
 
+  const [placeOrderModalVisible, setPoVisible] = useState(false);
 
   let width = Dimensions.get('window').width;
   let height = Dimensions.get('window').height;
   return (
-    <View style={{ marginTop: 50 }}>
-       <Modal
+    <View style={{ marginTop: 50, backgroundColor: 'white' }}>
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}>
@@ -129,7 +134,16 @@ const Cart = () => {
             </View>
           </View>)}
       </Modal>
-       
+      <Modal
+        style={{ backgroundColor: 'blue' }}
+        animationType="slide"
+        transparent={false}
+        visible={placeOrderModalVisible}>
+        <View style={{ width: '100%', height: '100%', backgroundColor: '#344c63' }}>
+          <Image source={{ uri: 'https://i.pinimg.com/originals/ff/fc/5a/fffc5a92c68455f331036891970b1fb9.gif' }} style={{ width: '100%', height: '100%', borderRadius: 30, borderWidth: 1 }} />
+          {/* <Text style={{ fontSize: 24, marginLeft: '20%' }}>Placing Order....</Text> */}
+        </View>
+      </Modal >
       {Heading(`Cart(${cartItems.length})`)}
       <View style={{ display: 'flex', flexDirection: 'row', marginLeft: 10, marginVertical: 5 }}>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -148,7 +162,7 @@ const Cart = () => {
       <View style={{ height: height - 210 }}>
         <ScrollView>
           <View style={{ display: 'flex', width: '100%', flexWrap: 'wrap', flexDirection: 'row' }}>
-            {cartItems.map((item, i) => {
+            {cartItems.length ? cartItems.map((item, i) => {
               return (
                 <View style={{ width: width - 10 }}>
 
@@ -158,7 +172,10 @@ const Cart = () => {
 
                 </View>
               )
-            })}
+            }) : <View style={{ marginTop: '20%', marginHorizontal: 20 }}>
+              <Image source={EmptyCartImg} style={{ width: 300, height: 300, borderRadius: 10, margin: 3 }}></Image>
+              <Text style={{ fontSize: 20, marginLeft: '10%', fontFamily: 'space-mono' }}>Your Cart is Empty</Text></View>
+            }
           </View>
         </ScrollView>
       </View>
@@ -172,8 +189,15 @@ const Cart = () => {
           <Text style={{ fontSize: 20 }}>₹ {total}</Text>
         </View>
         <TouchableOpacity onPress={() => {
-          setCaryItems(cart);
-          setTotal(totalPrice)
+          setPoVisible(true);
+          // setCaryItems(cart);
+          // setTotal(totalPrice);
+          //setModalVisible(true);
+          setTimeout(() => {
+            setPoVisible(false);
+            setModalVisible(false);
+            navigation.navigate('OrderDetails')
+          }, 3000);
         }} style={styles.orderButton}><Text style={{ color: 'white', padding: 6, fontWeight: '600', fontSize: 18 }}>Place Order</Text></TouchableOpacity>
       </View>
     </View>
