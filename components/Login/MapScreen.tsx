@@ -74,7 +74,7 @@ class Demo extends Component {
         >
           <Image
             style={{ width: 50, height: 50, resizeMode: "contain" }}
-            source={require("./pin.png")}
+            source={{ uri: '' }}
           />
         </View>
       </View>

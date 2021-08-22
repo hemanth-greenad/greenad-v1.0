@@ -1,75 +1,74 @@
 {
- "info":[{
-  "id":"1",
-    "title": "Tomatoes - Orgranically Grown",
-    "img":"https://study.com/cimages/multimages/16/adobestock_34617669.jpeg",
-    "original":"20",
-    "actual":"18"
-
-  },
-  {
-    "id":"2",
-    "title": "Beetroot-known to be great purifier",
-    "img":"https://i.ndtvimg.com/i/2018-02/beetroot_620x350_41519193677.jpg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"3",
-    "title": "Beans - packed with soluble fibers",
-    "img":"https://i.ndtvimg.com/i/2016-06/beans_625x350_81464758940.jpg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"4",
-    "title": "Broccoli-source of vitamin C and K",
-    "img":"https://i.ndtvimg.com/i/2018-01/broccoli_650x400_61516791195.jpg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"5",
-    "title": " Cabbage - rich in fiber content",
-    "img":"https://i.ndtvimg.com/i/2018-02/cabbage_620x350_51519194277.jpg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"6",
-    "title": "Potato-It helps protect the skin",
-    "img":"https://i.ndtvimg.com/i/2018-02/potatoes_620x350_81518093477.jpg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"7",
-    "title": "Onions - Packed With Nutrients",
-    "img":"https://food.fnr.sndimg.com/content/dam/images/food/fullset/2020/08/10/fn_red-onions-getty_s4x3.jpg.rend.hgtvcom.476.357.suffix/1597096320410.jpeg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"8",
-    "title": "Spinach - source of vitamin C and K",
-    "img":"https://5.imimg.com/data5/TJ/WH/QX/SELLER-2668166/red-spinach-500x500.jpg",
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"9",
-    "title": "Onions - Packed With Nutrients",
-    "img":"https://study.com/cimages/multimages/16/adobestock_34617669.jpeg",
-    
-    "original":"20",
-    "actual":"18"
-  },
-  {
-    "id":"10",
-    "title": "Tomatoes-Orgranically Grown",
-    "img":"https://5.imimg.com/data5/TJ/WH/QX/SELLER-2668166/red-spinach-500x500.jpg",
-    "original":"20",
-    "actual":"18"
-  }]
-
+  "info": [
+    {
+      "id": "1",
+      "title": "Tomatoes",
+      "img": "https://study.com/cimages/multimages/16/adobestock_34617669.jpeg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "2",
+      "title": "Beetroot",
+      "img": "https://i.pinimg.com/originals/2a/f8/4d/2af84d5db8eabf98005cb216f465f459.jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "3",
+      "title": "Beans",
+      "img": "https://img.freepik.com/free-photo/green-beans-handful-isolated-white-background-cutout_1205-1714.jpg?size=626&ext=jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "4",
+      "title": "Broccoli",
+      "img": "https://thumbs.dreamstime.com/b/broccoli-isolated-white-background-close-up-view-green-raw-vegetable-131618524.jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "5",
+      "title": " Cabbage",
+      "img": "https://previews.123rf.com/images/atoss/atoss1201/atoss120100011/11903322-cabbage-isolated-on-white-background.jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "6",
+      "title": "Potato",
+      "img": "https://thumbs.dreamstime.com/b/fresh-potatoes-white-background-isolated-new-young-potato-123810000.jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "7",
+      "title": "Onions",
+      "img": "https://image.shutterstock.com/image-photo/red-sliced-onion-isolated-on-260nw-140597815.jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "8",
+      "title": "Spinach",
+      "img": "https://image.shutterstock.com/image-photo/spinach-on-white-background-600w-67542589.jpg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "9",
+      "title": "Onions",
+      "img": "https://study.com/cimages/multimages/16/adobestock_34617669.jpeg",
+      "original": "20",
+      "actual": "18"
+    },
+    {
+      "id": "10",
+      "title": "Tomatoes",
+      "img": "https://5.imimg.com/data5/TJ/WH/QX/SELLER-2668166/red-spinach-500x500.jpg",
+      "original": "20",
+      "actual": "18"
+    }
+  ]
 }

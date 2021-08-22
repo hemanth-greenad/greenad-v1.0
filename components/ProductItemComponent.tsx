@@ -14,7 +14,8 @@ interface prod {
 export default function ProductItem(props: prod) {
     let width = Dimensions.get('window').width;
     return (
-        <View style={{ display: 'flex', width: '100%', flexWrap: 'wrap', flexDirection: 'row' }}>
+        <View style={{ display: 'flex', backgroundColor: '#364250', borderTopRightRadius: 10, borderTopLeftRadius: 10, marginTop: 10, width: '100%', flexWrap: 'wrap', flexDirection: 'row' }}>
+            <Text style={{ color: 'white', paddingTop: 20, paddingBottom: 20, marginLeft: '28%', fontSize: 20, fontWeight: '700', width: width }}>Vegetables List</Text>
             {Json.info.map((item, i) => {
                 return (
                     <View style={{ width: width / 2 }}>
@@ -38,7 +39,7 @@ function ItemView(props: item) {
     const [volume, changeVolume] = useState(0);
     const [isFav, changeIsFav] = useState(false);
     return (
-        <View style={{ display: 'flex', backgroundColor: 'white', minHeight: 200, borderWidth: 2, borderRadius: 10, borderColor: 'rgba(112,112,112,.38)', margin: 5 }}>
+        <View style={{ display: 'flex', elevation: 5, backgroundColor: 'white', minHeight: 200, borderWidth: 2, borderRadius: 10, borderColor: 'rgba(112,112,112,.38)', margin: 5 }}>
             <Image source={{ uri: props.imgUrl }} style={{ height: 150, borderTopRightRadius: 9, borderTopLeftRadius: 9 }}></Image>
             <Text style={{ padding: 2, margin: 2, fontSize: 15, fontWeight: 'bold' }}>{props.name}</Text>
             <Text style={{ fontSize: 10, fontWeight: '300', marginLeft: 8 }}>MRP:₹ 28.00</Text>
