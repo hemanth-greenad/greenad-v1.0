@@ -1,26 +1,92 @@
 import { FontAwesome } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, ToastAndroid } from "react-native";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements/dist/icons/Icon";
 import { ScrollView } from "react-native-gesture-handler";
 import Json from '../assets/sample.json';
+import firebase from '../components/fb/firebase';
+import { RootStackParamList } from "../types";
 
 interface prod {
     onItemsRemove: () => void;
     onItemsAdd: () => void;
 }
-
+const storeData = async (value: any) => {
+    try {
+        await AsyncStorage.setItem('he', value)
+    } catch (e) {
+        console.log('errrrrrrrrrror')
+    }
+}
+const showToastWithGravityAndOffset = () => {
+    ToastAndroid.showWithGravityAndOffset(
+        "Logged In",
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+    );
+};
 export default function ProductItem(props: prod) {
+    const navigation = useNavigation();
+    const [parr, setParr] = useState<any>();
+
+    useEffect(() => {
+
+        loadData()
+    })
+
+    function loadData() {
+        firebase.auth().currentUser?.getIdToken(true).then((idtoken) => {
+            axios.get("https://greenad.herokuapp.com/getProducts", {
+                headers: {
+                    Authorization: 'Bearer' + idtoken
+                }
+            }).then((result) => { console.log(result.data)}).catch((err) => console.log('err'))
+        }).then((msg) => console.log("123")).catch((err) => console.log("123err"))
+    }
+
     let width = Dimensions.get('window').width;
     return (
         <View style={{ display: 'flex', backgroundColor: '#364250', borderTopRightRadius: 10, borderTopLeftRadius: 10, marginTop: 10, width: '100%', flexWrap: 'wrap', flexDirection: 'row' }}>
             <Text style={{ color: 'white', paddingTop: 20, paddingBottom: 20, marginLeft: '28%', fontSize: 20, fontWeight: '700', width: width }}>Vegetables List</Text>
-            {Json.info.map((item, i) => {
+            {Json.info.map((item:any) => {
                 return (
                     <View style={{ width: width / 2 }}>
+                        <ItemView imgUrl={item.img} name={item.title} onItemsAdd={() => {
 
-                        <ItemView imgUrl={item.img} name={item.title} onItemsAdd={() => { props.onItemsAdd() }} onItemsRemove={() => { props.onItemsRemove() }} />
+                            if (firebase.auth().currentUser?.uid !== undefined) {
+                                storeData('af');
+                                firebase.auth().currentUser?.getIdToken(true).then((idtoken) => {
+                                    axios.post('https://greenad.herokuapp.com/saveCart/' + firebase.auth().currentUser?.uid, {
+                                        productId: item.id,
+                                        productQuantity: item.actual,
+                                        quantityType: 5,
+                                    },
+                                        {
+                                            headers: {
+                                                Authorization: 'Bearer' + idtoken
+                                            }
+                                        }).then((result) => { }).catch((err) => console.log(err))
+                                }).then((msg) => console.log(msg)).catch((err) => console.log(err))
+                                props.onItemsAdd()
+
+                            }
+                        }} onItemsRemove={() => {
+                            firebase.auth().currentUser?.getIdToken(true).then((idtoken) => {
+                                axios.get('https://greenad.herokuapp.com/deleteCartItem/' + item.id + '/' + firebase.auth().currentUser?.uid,
+                                    {
+                                        headers: {
+                                            Authorization: 'Bearer' + idtoken
+                                        }
+                                    }).then((result) => { }).catch((err) => console.log(err))
+                            }).then((msg) => console.log(msg)).catch((err) => console.log(err))
+                            props.onItemsRemove()
+                        }} />
 
                     </View>
                 )
@@ -35,6 +101,7 @@ interface item {
     onItemsAdd: () => void;
 }
 function ItemView(props: item) {
+
     const [isAddedToCart, changeIsAddedToCart] = useState(false);
     const [volume, changeVolume] = useState(0);
     const [isFav, changeIsFav] = useState(false);
@@ -49,6 +116,7 @@ function ItemView(props: item) {
                         return (
                             <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 8, marginLeft: 2 }}>
                                 <TouchableOpacity onPress={() => {
+
                                     if (!(volume - 1)) {
                                         props.onItemsRemove();
                                     }
@@ -72,7 +140,14 @@ function ItemView(props: item) {
                                     <Icon type="font-awesome" name="heart" color={isFav ? 'tomato' : 'white'} size={20} />
 
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => { changeVolume(volume + 1); props.onItemsAdd() }} style={[styles.AddToCartButton, { marginLeft: 10 }]}>
+                                <TouchableOpacity onPress={() => {
+                                    if (firebase.auth().currentUser?.uid !== undefined) {
+                                        changeVolume(volume + 1); props.onItemsAdd()
+                                    } else {
+                                        showToastWithGravityAndOffset()
+                                        //alert('please login to add items to cart')
+                                    }
+                                }} style={[styles.AddToCartButton, { marginLeft: 10 }]}>
 
                                     <Icon type="font-awesome" name="cart-plus" color="white" size={20} />
                                 </TouchableOpacity>

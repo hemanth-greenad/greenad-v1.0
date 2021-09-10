@@ -61,18 +61,6 @@ return(
     <MaterialCommunityIcons style={{left:10,top:10}} name="truck-delivery-outline" size={24} color="black" />
     <Text style={{fontSize:15,top:10,left:15,fontFamily:'sans-serif-condensed'}}>Delivery within 12 hour</Text> 
     </View>
-
-
-
-
-
-
-
-
-
-
-
-    
     </ScrollView>
     <Header rightComponent={rbutton()}  leftComponent={lbutton()} statusBarProps={{ backgroundColor:'#43a047'}} containerStyle={{top:180,height:60,backgroundColor:primaryColor}} />
     </View>

@@ -10,6 +10,7 @@ import {
   Image,
   ToastAndroid,
 } from "react-native";
+import { Entypo } from '@expo/vector-icons';
 import MapView, { Marker } from "react-native-maps";
 
 class Demo extends Component {
@@ -18,7 +19,7 @@ class Demo extends Component {
       latitude: 13.0827,
       longitude: 80.2707,
     },
-    marginBottom: 1,
+    marginBottom: 1
   };
   render() {
     let { latitude, longitude } = this.state.coordinate;
@@ -72,10 +73,7 @@ class Demo extends Component {
             position: "absolute",
           }}
         >
-          <Image
-            style={{ width: 50, height: 50, resizeMode: "contain" }}
-            source={{ uri: '' }}
-          />
+          <Entypo name="location-pin" size={35} color="red" />
         </View>
       </View>
     );

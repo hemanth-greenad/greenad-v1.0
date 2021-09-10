@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, SafeAreaView, Image, Dimensions } from "react-native";
-import Carousel from 'react-native-snap-carousel';
+// import Carousel from 'react-native-snap-carousel';
 
 export default class CarosalView extends React.Component<any, any> {
 

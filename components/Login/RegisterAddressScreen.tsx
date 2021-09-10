@@ -10,6 +10,7 @@ import {
   Image,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
   NavigationParams,
@@ -201,10 +202,7 @@ class RegisterAddressScreen extends React.Component<Props> {
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate("map")}
               >
-                <Image
-                  style={{ width: 50, height: 50, resizeMode: "contain" }}
-                  source={{ uri: '' }}
-                />
+                       <Entypo name="location-pin" size={35} color="red" />
               </TouchableOpacity>
             </View>
           </View>

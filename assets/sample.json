@@ -1,72 +1,65 @@
 {
   "info": [
     {
-      "id": "1",
+      "id": 1,
       "title": "Tomatoes",
       "img": "https://study.com/cimages/multimages/16/adobestock_34617669.jpeg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "2",
+      "id": 2,
       "title": "Beetroot",
       "img": "https://i.pinimg.com/originals/2a/f8/4d/2af84d5db8eabf98005cb216f465f459.jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "3",
+      "id": 3,
       "title": "Beans",
       "img": "https://img.freepik.com/free-photo/green-beans-handful-isolated-white-background-cutout_1205-1714.jpg?size=626&ext=jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "4",
+      "id": 4,
       "title": "Broccoli",
       "img": "https://thumbs.dreamstime.com/b/broccoli-isolated-white-background-close-up-view-green-raw-vegetable-131618524.jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "5",
+      "id": 5,
       "title": " Cabbage",
       "img": "https://previews.123rf.com/images/atoss/atoss1201/atoss120100011/11903322-cabbage-isolated-on-white-background.jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "6",
+      "id": 6,
       "title": "Potato",
       "img": "https://thumbs.dreamstime.com/b/fresh-potatoes-white-background-isolated-new-young-potato-123810000.jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "7",
+      "id": 7,
       "title": "Onions",
       "img": "https://image.shutterstock.com/image-photo/red-sliced-onion-isolated-on-260nw-140597815.jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "8",
+      "id": 8,
       "title": "Spinach",
       "img": "https://image.shutterstock.com/image-photo/spinach-on-white-background-600w-67542589.jpg",
       "original": "20",
       "actual": "18"
     },
     {
-      "id": "9",
+      "id": 9,
       "title": "Onions",
       "img": "https://study.com/cimages/multimages/16/adobestock_34617669.jpeg",
-      "original": "20",
-      "actual": "18"
-    },
-    {
-      "id": "10",
-      "title": "Tomatoes",
-      "img": "https://5.imimg.com/data5/TJ/WH/QX/SELLER-2668166/red-spinach-500x500.jpg",
       "original": "20",
       "actual": "18"
     }

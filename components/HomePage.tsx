@@ -14,21 +14,21 @@ import Heading from './HeadingComponent';
 import ImageWithCuttedEdge from './Img-with-cutted-edge';
 import weeklyPack from './Weekly-Pack';
 import ProductItem from './ProductItemComponent';
-
+import firebase from '../components/fb/firebase';
 //drawer navigation
 import { AppRegistry, Dimensions } from 'react-native';
 import { DrawerNavigationState } from 'react-navigation';
 import Second from './Second';
 import Third from './Third';
-import { NavigationContainer, DrawerActions } from '@react-navigation/native';
+import { NavigationContainer, DrawerActions, useNavigation } from '@react-navigation/native';
 import WeeklyPackScroll from './WeeklyPackScroll';
-import CarosalView from './CaroselView';
+import axios from 'axios';
+// import CarosalView from './CaroselView';
 
 const HomePage = ({ navigation }: StackScreenProps<RootStackParamList>) => {
 
 
   const [cartVal, changeCartVal] = useState(0);
-
   const [badgeCount, setBadgeCount] = useState(0);
   DeviceEventEmitter.addListener('updateBadgeCount', (data: number) => {
     setBadgeCount(data)
@@ -61,7 +61,7 @@ const HomePage = ({ navigation }: StackScreenProps<RootStackParamList>) => {
         <View >
           {Carousel}
         </View>
-        <CarosalView />
+        {/* <CarosalView /> */}
         <WeeklyPackScroll />
         {/* {Heading('Best sales')} */}
         <VerticalScroll />
@@ -72,13 +72,16 @@ const HomePage = ({ navigation }: StackScreenProps<RootStackParamList>) => {
         {Carousel}
         <View>
           {weeklyPack()}
+          
         </View> */}
-        <ProductItem onItemsAdd={() => {
-          changeCartVal(cartVal + 1);
+       <ProductItem onItemsAdd={() => {
+
+         changeCartVal(cartVal + 1);
           DeviceEventEmitter.emit('updateBadgeCount', cartVal + 1);
+          
         }} onItemsRemove={() => {
           changeCartVal(cartVal - 1);
-          DeviceEventEmitter.emit('updateBadgeCount', cartVal - 1);
+                   DeviceEventEmitter.emit('updateBadgeCount', cartVal - 1);
         }} />
       </ScrollView>
     </View>
@@ -92,19 +95,3 @@ const styles = StyleSheet.create({
   searchBar_inputStyle: { top: -10 },
 });
 export default HomePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

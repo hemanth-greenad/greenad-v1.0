@@ -28,7 +28,7 @@ import AddressScreen from "./Login/AddressScreen";
 import Favourites from "./Favourites";
 import OrderDetails from "./orderDetails";
 import MyTabBar from './CustomTab';
-
+import firebase from '../components/fb/firebase';
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -150,7 +150,11 @@ function TabNav() {
     <Tab.Navigator
       initialRouteName="Home"
       // tabBar={props => <MyTabBar {...props} />}
+      
+
+      
       tabBarOptions={{
+        
         activeTintColor: "white",
         inactiveTintColor: "black",
         activeBackgroundColor: primaryColor,
@@ -186,6 +190,7 @@ function TabNav() {
         options={{
           title: "Home",
           tabBarLabel: "Home",
+          // unmountOnBlur:
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="home" size={24} color="" />
           ),
@@ -195,6 +200,7 @@ function TabNav() {
         name="Cart"
         component={Cart}
         options={{
+          unmountOnBlur:true,
           tabBarLabel: "Cart",
           tabBarBadge: badgeCount,
           tabBarIcon: ({ color }) => (
@@ -224,11 +230,13 @@ const MainPage = () => {
           name="Home"
           component={stackTab}
         />
-        <Drawer.Screen
+       { (firebase.auth().currentUser?.uid===undefined)&&<Drawer.Screen
           options={{ drawerIcon: () => <Icon name="home" /> }}
-          name="Login"
+          name="Login/SignUp"
           component={loginNav}
         />
+        }
+
         <Drawer.Screen
           options={{ drawerIcon: () => <Icon name="home" /> }}
           name="Account"

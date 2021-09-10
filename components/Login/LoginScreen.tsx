@@ -1,17 +1,43 @@
 import { Header } from "@react-navigation/stack";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { NavigationContainer, TabRouter } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { onChange } from "react-native-reanimated";
+import axios from 'axios';
+import firebase from '../fb/firebase';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
-const LoginScreen = ({ navigation }) => {
+
+
+const LoginScreen = ({ navigation }:any) => {
   const [phone, onChangePhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isFocused, setIsFocused] = useState(true);
+  const[islogged,setIslogged]=useState(false);
   // const [handleBlur, setHandleBlur] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const [verificationId, setVerificationId] = useState('');
+  const recaptchaVerifier:any= useRef(null);
+ 
+
+const sendVerification = () => {
+
+  const phoneProvider = new firebase.auth.PhoneAuthProvider();
+  
+  phoneProvider
+    .verifyPhoneNumber('+91'+phoneNumber, recaptchaVerifier.current)
+    .then((code)=>{
+      navigation.navigate("pin",{vcode:code})
+    }
+      );
+    
+    
+};
+
 
   function phoneValidator() {
     let rjx = /^[0-9]+$/;
@@ -45,15 +71,18 @@ const LoginScreen = ({ navigation }) => {
               },
             ]}
             onBlur={() => [phoneValidator()]}
-            onChangeText={onChangePhone}
-            value={phone}
+            onChangeText={(e)=>setPhoneNumber(e)}
+            value={phoneNumber}
           />
         </View>
         <Text style={styles.textError}>{[phoneError]}</Text>
         <View style={styles.submit}>
-          <TouchableOpacity onPress={() => navigation.navigate("pin")}>
+          <TouchableOpacity onPress={sendVerification}>
             <Text style={styles.submitText}>Login</Text>
           </TouchableOpacity>
+          <FirebaseRecaptchaVerifierModal
+      ref={recaptchaVerifier}
+    />
         </View>
       </View>
     </View>

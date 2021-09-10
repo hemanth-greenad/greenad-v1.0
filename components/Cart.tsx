@@ -1,5 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, Modal, ActivityIndicator, Button } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,15 +7,31 @@ import Json from '../assets/sample.json';
 import VerticalScroll from './cards-vertical-scroll';
 import EmptyCartImg from '../assets/images/EmptyCart.png';
 import Heading from './HeadingComponent';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import firebase from './fb/firebase';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { withNavigationFocus } from 'react-navigation';
 
 
-export interface cartItem {
+
+export interface cItem {
   id: number,
   price: number,
   quantity: number,
   title: string,
   imgUrl: string
+}
+export interface cartItem {
+  productID: number,
+  availableQty: number,
+  category: string,
+  discountInPercent: number,
+  finalPricePerQty: number,
+  imgUrl: string,
+  pricePerQuantity: number,
+  productName: string,
+  quantityType: string,
 }
 
 export interface Address {
@@ -30,46 +46,107 @@ export interface Address {
   longitude: string;
 }
 
-const Cart = () => {
+const Cart = ({ navigation }: any) => {
+  useEffect(() => {
+    const unsubscribe=navigation.addListener('focus',()=>{
+    
+      loadData();
+    });
+    // return ()=>{
+ 
+    // };
+      }, [navigation]);
+
   let cart: cartItem[] = [];
+  const [refresh, setRefersh] = useState(0);
   const [address, setAddress] = useState<Address[]>([]);
   const [isLoading, setLoading] = useState(true);
+  const [mainloading, setMainLoad] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState("0");
-  const navigation = useNavigation();
+  const [cartItems, setCaryItems] = useState<cartItem[]>([]);
+
 
   const addURL =
     "https://raw.githubusercontent.com/somgreenad/food/master/assets/address.json";
-  useEffect(() => {
+  const cartUrl = "https://greenad.herokuapp.com/getCartItems/" + firebase.auth().currentUser?.uid;
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('he').then((data)=>alert(data))
+      
+    } catch(e) {
+      console.log('cart er')
+    }
+  }
+
+
+
+  function loadData() {
+    setMainLoad(false);
+    firebase.auth().currentUser?.getIdToken(true).then((idtoken) => {
+      axios.get(cartUrl,
+        {
+          headers: {
+            Authorization: 'Bearer' + idtoken
+          }
+        }).then((result) => {
+          result.data.forEach((x: cartItem) => {
+            cart.push({
+              productID: x.productID,
+              availableQty: x.availableQty,
+              category: x.category,
+              discountInPercent: x.discountInPercent,
+              finalPricePerQty: x.finalPricePerQty,
+              imgUrl: x.imgUrl,
+              pricePerQuantity: x.pricePerQuantity,
+              productName: x.productName,
+              quantityType: x.quantityType,
+            }); totalPrice = totalPrice + 10
+          })
+          setCaryItems([...cart]);
+          setMainLoad(true)
+        }).catch((err) => console.log(err))
+    }).then((msg) => console.log("msg")).catch((err) => console.log(err))
+
+  }
+
+
+  let totalPrice = 0;
+  const [selectedAddressPin, setSelectedAddressPin] = useState("625501");
+
+
+
+  const [total, setTotal] = useState<number>(totalPrice);
+  // console.log("cartItems cartItems cartItems cartItems")
+
+  // }
+
+  function loadAddress() {
     fetch(addURL)
       .then((Response) => Response.json())
       .then((json) => {
         setAddress(json.address);
-        console.log(json.address)
+        // console.log(json.address)
       })
       .catch((error) => alert(error))
       .finally(() => setLoading(false));
-  }, []);
-  let totalPrice = 0;
-  const [selectedAddressPin, setSelectedAddressPin] = useState("625501");
+  }
 
-  Json.info.forEach((x, i) => {
-    cart.push({
-      id: i,
-      price: 10,
-      quantity: 1,
-      title: x.title,
-      imgUrl: x.img
-    }); totalPrice = totalPrice + 10
-  })
 
-  const [cartItems, setCaryItems] = useState<cartItem[]>([...cart]);
-  const [total, setTotal] = useState<number>(totalPrice);
+
 
   function removeCartItem(id: number) {
-    let item = cartItems.find(x => x.id === id);
-    const localTOT = total - item?.price * item?.quantity;
-    const i = cartItems.findIndex(x => { return x.id === id; });
+    firebase.auth().currentUser?.getIdToken(true).then((idtoken) => {
+      axios.get("https://greenad.herokuapp.com/deleteCartItem/" + id + "/" + firebase.auth().currentUser?.uid,
+        {
+          headers: {
+            Authorization: 'Bearer' + idtoken
+          }
+        }).then((result) => {  }).catch((err) => console.log(err))
+    }).then((msg) => console.log(msg)).catch((err) => console.log(err))
+    let item = cartItems.find(x => x.productID === id);
+    const localTOT = total - item?.pricePerQuantity * item?.availableQty;
+    const i = cartItems.findIndex(x => { return x.productID === id; });
     let items = [...cartItems];
     items.splice(i, 1)
     setCaryItems(x => [...items]);
@@ -78,14 +155,14 @@ const Cart = () => {
   }
   function changeQuantity(id: number, increment: number) {
     let items = [...cartItems];
-    let index = items.findIndex(x => { return x.id === id; });
+    let index = items.findIndex(x => { return x.productID === id; });
     if (increment > 0) {
-      items[index].quantity++;
-      setTotal(x => x + items[index].price)
+      items[index].availableQty++;
+      setTotal(x => x + items[index].pricePerQuantity)
       setCaryItems([...items])
     } else {
-      items[index].quantity--;
-      setTotal(x => x - items[index].price);
+      items[index].availableQty--;
+      setTotal(x => x - items[index].pricePerQuantity);
       setCaryItems([...items]);
 
     }
@@ -95,6 +172,7 @@ const Cart = () => {
 
   let width = Dimensions.get('window').width;
   let height = Dimensions.get('window').height;
+  
   return (
     <View style={{ marginTop: 50, backgroundColor: 'white' }}>
       <Modal
@@ -153,6 +231,7 @@ const Cart = () => {
         </View>
         <View>
           <TouchableOpacity onPress={() => {
+            loadAddress();
             setModalVisible(true);
           }}
             style={styles.changeAdd}><Text style={{ color: 'white', fontWeight: '600', fontSize: 14 }}>change Address</Text></TouchableOpacity>
@@ -160,13 +239,13 @@ const Cart = () => {
         </View>
       </View>
       <View style={{ height: height - 210 }}>
-        <ScrollView>
+        {mainloading ? <ScrollView>
           <View style={{ display: 'flex', width: '100%', flexWrap: 'wrap', flexDirection: 'row' }}>
             {cartItems.length ? cartItems.map((item, i) => {
               return (
                 <View style={{ width: width - 10 }}>
 
-                  <ItemView quantity={item.quantity} price={item.price} id={item.id} imgUrl={item.imgUrl} name={item.title} onQuantityChange={(id, inc) => {
+                  <ItemView quantity={item.availableQty} price={item.pricePerQuantity} id={item.productID} imgUrl={item.imgUrl} name={item.productName} onQuantityChange={(id, inc) => {
                     changeQuantity(id, inc)
                   }} onItemsRemove={(x) => { removeCartItem(x) }} />
 
@@ -177,7 +256,7 @@ const Cart = () => {
               <Text style={{ fontSize: 20, marginLeft: '10%', fontFamily: 'space-mono' }}>Your Cart is Empty</Text></View>
             }
           </View>
-        </ScrollView>
+        </ScrollView> : <View style={[styles.container, styles.horizontal]}><ActivityIndicator size="large" color="green" /></View>}
       </View>
       <View style={{
         display: 'flex', backgroundColor: 'white', padding: 5, marginHorizontal: 5, justifyContent: 'space-around',
@@ -189,16 +268,28 @@ const Cart = () => {
           <Text style={{ fontSize: 20 }}>₹ {total}</Text>
         </View>
         <TouchableOpacity onPress={() => {
-          setPoVisible(true);
+          //  ii()
+          setRefersh(refresh + 1)
+          // setPoVisible(true);
           // setCaryItems(cart);
           // setTotal(totalPrice);
           //setModalVisible(true);
-          setTimeout(() => {
-            setPoVisible(false);
-            setModalVisible(false);
-            navigation.navigate('OrderDetails')
-          }, 3000);
-        }} style={styles.orderButton}><Text style={{ color: 'white', padding: 6, fontWeight: '600', fontSize: 18 }}>Place Order</Text></TouchableOpacity>
+          // if(cartItems.length!==0){
+          // if(firebase.auth().currentUser?.uid!==undefined){
+          // setTimeout(() => {
+
+          //   setPoVisible(false);
+          //   setModalVisible(false);
+          //   navigation.navigate('OrderDetails')
+          // }, 3000);}else{
+          //   navigation.navigate('Login')
+          // }}else{
+          //   alert("Your cart is empty")
+          // }
+
+        }} style={styles.orderButton}>
+          <Text style={{ color: 'white', padding: 6, fontWeight: '600', fontSize: 18 }}>Place Order</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -301,7 +392,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row'
   },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
 
+  },
   orderButton: {
     marginLeft: '10%',
     backgroundColor: '#00897b',

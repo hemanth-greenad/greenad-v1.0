@@ -12,6 +12,7 @@ export type RootStackParamList ={
   search: undefined;
   item:undefined;
   result:undefined;
+  Login:undefined;
 }​​​​​​​;
 
 
